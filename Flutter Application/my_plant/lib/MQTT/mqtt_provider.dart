@@ -31,16 +31,25 @@ class MQTTProvider with ChangeNotifier {
   Future<void> connectAndSubscribe() async {
     _isLoading = true;
     notifyListeners();
+    await _connect();
+    await refreshData(); // Initial data fetch
+  }
+
+  Future<void> _connect() async {
     await _mqttService.connect();
     _mqttService.dataStream.listen((data) {
       _latestData = data; // Store the latest data without notifying
     });
-    await refreshData(); // Initial data fetch
   }
 
   Future<void> refreshData() async {
     _isLoading = true;
     notifyListeners();
+
+    // Disconnect and reconnect to ensure fresh connection
+    //await _mqttService.disconnect();
+    await _connect();
+
     await Future.delayed(Duration(seconds: 1)); // Simulate refresh delay
     _sensorData = Map.from(_latestData); // Copy the latest data
     _lastRefreshTime = DateTime.now(); // Update the last refresh time
@@ -54,21 +63,27 @@ class MQTTProvider with ChangeNotifier {
   }
 
   void waterPlant() {
-    _mqttService.publishMessage('sensor/event', 'on');
-    print('sent message "on" to the topic: sensor/event');
+    _mqttService.publishMessage('sensor/event', '1');
+    print('sent message "ON" to the topic: sensor/event');
   }
 
   void waterPlantBy() {
-    // Assume soil moisture is a key indicator
+    // Extract the soil moisture value from the sensor data
     double soilMoisture = _sensorData['soilMoisture'] ?? 0.0;
 
-    // Define thresholds for soil moisture levels (these are arbitrary)
+    // Define thresholds and watering intervals
+    const double highMoistureThreshold = 70.0;
+    const double mediumMoistureThreshold = 50.0;
+    const double lowMoistureThreshold = 30.0;
+
     int hoursUntilNextWatering;
-    if (soilMoisture > 70) {
+
+    // Determine the watering interval based on soil moisture level
+    if (soilMoisture >= highMoistureThreshold) {
       hoursUntilNextWatering = 48; // Next watering in 2 days
-    } else if (soilMoisture > 50) {
+    } else if (soilMoisture >= mediumMoistureThreshold) {
       hoursUntilNextWatering = 24; // Next watering in 1 day
-    } else if (soilMoisture > 30) {
+    } else if (soilMoisture >= lowMoistureThreshold) {
       hoursUntilNextWatering = 12; // Next watering in 12 hours
     } else {
       hoursUntilNextWatering = 6; // Next watering in 6 hours
@@ -76,14 +91,14 @@ class MQTTProvider with ChangeNotifier {
 
     // Calculate the next watering time
     DateTime now = DateTime.now();
-    DateTime nextWateringTime =
-        now.add(Duration(hours: hoursUntilNextWatering));
+    _nextWateringTime = now.add(Duration(hours: hoursUntilNextWatering));
 
+    // Notify listeners to update the UI or other dependent components
     notifyListeners();
   }
 
   String get WateringTimeFormatted {
-    if (_nextWateringTime == null) return "-----";
+    if (_nextWateringTime == null) return "DATE";
     return DateFormat('EEE, MMM d, hh:mm a').format(_nextWateringTime!);
   }
 
