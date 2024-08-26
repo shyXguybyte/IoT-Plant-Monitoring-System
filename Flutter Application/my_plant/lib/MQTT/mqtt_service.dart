@@ -91,12 +91,12 @@ class MQTTService {
 
       // Create a new map with the expected keys, using default values if keys are missing
       final parsedData = {
-        'temperature': jsonData['light']?.toString() ?? 'N/A',
-        'waterTankLevel': jsonData['temperature']?.toString() ?? 'N/A',
-        'airQuality': jsonData['humidity']?.toString() ?? 'N/A',
-        'light': jsonData['soilMoisture']?.toString() ?? 'N/A',
-        'humidity': jsonData['airQuality']?.toString() ?? 'N/A',
-        'soilMoisture': jsonData['waterTankLevel']?.toString() ?? 'N/A',
+        'temperature': jsonData['tmp']?.toString() ?? 'N/A',
+        'waterTankLevel': jsonData['distance']?.toString() ?? 'N/A',
+        'airQuality': jsonData['air']?.toString() ?? 'N/A',
+        'light': jsonData['light']?.toString() ?? 'N/A',
+        'humidity': jsonData['humidity']?.toString() ?? 'N/A',
+        'soilMoisture': jsonData['soil moisture']?.toString() ?? 'N/A',
       };
 
       print('Parsed data: $parsedData');
