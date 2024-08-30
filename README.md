@@ -12,7 +12,7 @@ Welcome to our IoT Plant Monitoring System project, developed as part of the 202
 5. [🔄 Circuit Diagram](#-circuit-diagram)
 6. [💻 Software Components](#-software-components)
 7. [🏗️ System Architecture](#️-system-architecture)
-8. [Data Flow Architecture](#data-flow-architecture)
+8. [🧩 Data Flow Architecture](#data-flow-architecture)
 9. [📱 Flutter Application](#-flutter-application)
 10. [🔗 Useful Resources](#-useful-resources)
 
@@ -130,7 +130,7 @@ Check out the video below for a demonstration of the project:
 
 - **Diagram**: [Draw.io](https://app.diagrams.net/)
 ---
-## Data Flow Architecture
+## 🧩 Data Flow Architecture
 
 Our system utilizes a multi-component architecture to ensure efficient data collection, processing, and visualization. Here's an overview of the data flow:
 
