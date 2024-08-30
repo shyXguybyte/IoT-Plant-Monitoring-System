@@ -68,6 +68,9 @@ Check out the video below for a demonstration of the project:
 ---
 
 ## 💻 Software Components
+
+![image](https://github.com/user-attachments/assets/fab72802-c4a7-4658-8c16-70ea020d4e6d)
+
 1. **Visual Studio Code**
    - [Visual Studio Code](https://code.visualstudio.com/) (VS Code) is our recommended Integrated Development Environment (IDE) for ESP32 programming
    - Download and install [here](https://code.visualstudio.com/download)
@@ -98,8 +101,11 @@ Check out the video below for a demonstration of the project:
 
 8. **Grafana**
    - For advanced data visualization and dashboards.
-  
-![image](https://github.com/user-attachments/assets/fab72802-c4a7-4658-8c16-70ea020d4e6d)
+     
+![Untitled design (5)](https://github.com/user-attachments/assets/19fef212-ab03-4492-a099-5a87504491d9)
+
+
+
 
 ---
 
