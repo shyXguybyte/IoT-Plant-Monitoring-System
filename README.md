@@ -1,7 +1,22 @@
 # 🌱 IoT Plant Monitoring System
 
 Welcome to our IoT Plant Monitoring System project, developed as part of the 2024 summer training at the Faculty of Computers and Data Science, Alexandria University.
+---
 
+## Table of Contents
+
+1. [📚 Team Members](#-team-members)
+2. [🌍 Project Overview](#-project-overview)
+3. [🛠️ Hardware Components](#️-hardware-components)
+4. [📹 Project Demo](#-project-demo)
+5. [🔄 Circuit Diagram](#-circuit-diagram)
+6. [💻 Software Components](#-software-components)
+7. [🏗️ System Architecture](#️-system-architecture)
+8. [Data Flow Architecture](#data-flow-architecture)
+9. [📱 Flutter Application](#-flutter-application)
+10. [🔗 Useful Resources](#-useful-resources)
+
+---
 ## 📚 Team Members
 - **Shehab Magdy Elsayed**         - ID: 22011558
 - **Samy Adel**                    - ID: 22010107
