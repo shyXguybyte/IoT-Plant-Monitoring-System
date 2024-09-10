@@ -62,7 +62,6 @@ Our IoT Plant Monitoring System helps users maintain the health of their plants 
 - **🖥️ LCD I2C**
 - **🪢 Jumper Wires**
 - **🔘 Push Button**
-- **⚙️ Potentiometer**
   
 ---
 
