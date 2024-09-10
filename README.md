@@ -51,7 +51,6 @@ Our IoT Plant Monitoring System helps users maintain the health of their plants 
 
 ### Actuators
 - **🚰 Water Pump**
-- **🖥️ LCD I2C**
 - **💡 LED**
 - **🔊 Buzzer**
 
@@ -60,7 +59,7 @@ Our IoT Plant Monitoring System helps users maintain the health of their plants 
 - **🔋 9V Battery & Cap**
 - **🎛️ Keypad**
 - **🔧 Breadboard**
-- **🔗 I2C**
+- **🖥️ LCD I2C**
 - **🪢 Jumper Wires**
 - **🔘 Push Button**
 - **⚙️ Potentiometer**
