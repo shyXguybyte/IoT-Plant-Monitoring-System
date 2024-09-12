@@ -1,9 +1,13 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:my_plant/screens/HomeScreen/PlantHealth.dart';
 import 'mqtt_service.dart';
 import 'package:intl/intl.dart';
 
 class MQTTProvider with ChangeNotifier {
+  PlantHealthResult _plantHealth = PlantHealthResult('Unknown', []);
+  PlantHealthResult get plantHealth => _plantHealth;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -17,8 +21,17 @@ class MQTTProvider with ChangeNotifier {
   DateTime? _nextWateringTime;
   Timer? _autoRefreshTimer;
 
+  bool _buzzerOn = false;
+  bool _greenLEDOn = false;
+  bool _redLEDOn = false;
+
+  bool get buzzerOn => _buzzerOn;
+  bool get greenLEDOn => _greenLEDOn;
+  bool get redLEDOn => _redLEDOn;
+
   MQTTProvider() {
     _setupAutoRefresh();
+    waterPlantBy(); // Add this line
   }
 
   void _setupAutoRefresh() {
@@ -32,13 +45,13 @@ class MQTTProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     await _connect();
-    await refreshData(); // Initial data fetch
+    await refreshData();
   }
 
   Future<void> _connect() async {
     await _mqttService.connect();
     _mqttService.dataStream.listen((data) {
-      _latestData = data; // Store the latest data without notifying
+      _latestData = data;
     });
   }
 
@@ -46,60 +59,83 @@ class MQTTProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    // Disconnect and reconnect to ensure fresh connection
-    //await _mqttService.disconnect();
     await _connect();
 
     await Future.delayed(Duration(seconds: 1)); // Simulate refresh delay
     _sensorData = Map.from(_latestData); // Copy the latest data
     _lastRefreshTime = DateTime.now(); // Update the last refresh time
+
+    // Add this line to update the watering time
+    waterPlantBy();
+
     _isLoading = false;
     notifyListeners();
   }
 
   String get lastRefreshTimeFormatted {
-    if (_lastRefreshTime == null) return "Never refreshed";
-    return DateFormat('EEE, MMM d, hh:mm a').format(_lastRefreshTime!);
-  }
-
-  void waterPlant() {
-    _mqttService.publishMessage('sensor/event', '1');
-    print('sent message "ON" to the topic: sensor/event');
+    return _lastRefreshTime == null
+        ? "Never refreshed"
+        : DateFormat('EEE, MMM d, hh:mm a').format(_lastRefreshTime!);
   }
 
   void waterPlantBy() {
-    // Extract the soil moisture value from the sensor data
-    double soilMoisture = _sensorData['soilMoisture'] ?? 0.0;
+    // Parse the soil moisture value to a double, defaulting to 0.0 if it can't be parsed
+    double soilMoisture =
+        double.tryParse(_sensorData['soilMoisture'].toString()) ?? 0.0;
 
-    // Define thresholds and watering intervals
     const double highMoistureThreshold = 70.0;
     const double mediumMoistureThreshold = 50.0;
     const double lowMoistureThreshold = 30.0;
 
     int hoursUntilNextWatering;
 
-    // Determine the watering interval based on soil moisture level
     if (soilMoisture >= highMoistureThreshold) {
-      hoursUntilNextWatering = 48; // Next watering in 2 days
+      hoursUntilNextWatering = 48;
     } else if (soilMoisture >= mediumMoistureThreshold) {
-      hoursUntilNextWatering = 24; // Next watering in 1 day
+      hoursUntilNextWatering = 24;
     } else if (soilMoisture >= lowMoistureThreshold) {
-      hoursUntilNextWatering = 12; // Next watering in 12 hours
+      hoursUntilNextWatering = 12;
     } else {
-      hoursUntilNextWatering = 6; // Next watering in 6 hours
+      hoursUntilNextWatering = 6;
     }
 
-    // Calculate the next watering time
-    DateTime now = DateTime.now();
-    _nextWateringTime = now.add(Duration(hours: hoursUntilNextWatering));
-
-    // Notify listeners to update the UI or other dependent components
+    _nextWateringTime =
+        DateTime.now().add(Duration(hours: hoursUntilNextWatering));
     notifyListeners();
   }
 
-  String get WateringTimeFormatted {
-    if (_nextWateringTime == null) return "DATE";
-    return DateFormat('EEE, MMM d, hh:mm a').format(_nextWateringTime!);
+  String get wateringTimeFormatted {
+    return _nextWateringTime == null
+        ? "Undetermined"
+        : DateFormat('EEE, MMM d, hh:mm a').format(_nextWateringTime!);
+  }
+
+  void checkForNewIssues(BuildContext context) {
+    PlantHealthResult newHealth = calculatePlantHealth(_sensorData);
+    if (newHealth.issues.length > _plantHealth.issues.length) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('New plant health issues detected!'),
+          action: SnackBarAction(
+            label: 'View',
+            onPressed: () {
+              // Navigate to a detailed view or open a dialog
+            },
+          ),
+        ),
+      );
+    }
+    _plantHealth = newHealth;
+    notifyListeners();
+  }
+
+  void waterPlant() {
+    _mqttService.publishMessage('sensor/event', '100');
+    print('Sent message "ON" to the topic: sensor/event');
+    // Reset the next watering time
+    _nextWateringTime = null;
+    waterPlantBy();
+    notifyListeners();
   }
 
   @override
