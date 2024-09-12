@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_plant/MQTT/mqtt_provider.dart';
 import 'package:my_plant/screens/Stats%20screen/google_sheets_data.dart';
-import 'package:my_plant/screens/signIn.dart';
+import 'package:my_plant/screens/Stats%20screen/stats.dart';
+import 'package:my_plant/screens/Auth/signIn.dart';
 import 'package:my_plant/utils/colors.dart';
 import 'package:provider/provider.dart';
-
-import '../Stats screen/stats.dart';
-import 'PlantHealth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,21 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Consumer<MQTTProvider>(
           builder: (context, mqttProvider, child) {
             final sensorData = mqttProvider.sensorData;
-
-            // Calculate plant health based on sensor readings
-            String plantHealth = calculatePlantHealth(sensorData);
+            final plantHealthResult = mqttProvider.plantHealth;
 
             // Map health status to icons
-            IconData healthIcon = plantHealth == 'Good'
+            IconData healthIcon = plantHealthResult.overallHealth == 'Good'
                 ? Icons.check_circle
-                : plantHealth == 'Moderate'
+                : plantHealthResult.overallHealth == 'Moderate'
                     ? Icons.warning
                     : Icons.error;
 
             // Map health status to colors
-            Color healthColor = plantHealth == 'Good'
+            Color healthColor = plantHealthResult.overallHealth == 'Good'
                 ? Colors.green
-                : plantHealth == 'Moderate'
+                : plantHealthResult.overallHealth == 'Moderate'
                     ? Colors.orange
                     : Colors.red;
 
@@ -71,66 +67,156 @@ class _HomeScreenState extends State<HomeScreen> {
                                 physics: NeverScrollableScrollPhysics(),
                                 children: [
                                   _buildStatCard(
-                                      '${sensorData['temperature']} °C',
+                                      '${sensorData['temperature'].round()} °C',
                                       'Temperature',
                                       Colors.lightGreen.shade100,
-                                      Icons.thermostat), // Added Icons
+                                      Icons.thermostat),
                                   _buildStatCard(
-                                      '${sensorData['waterTankLevel']} liter',
+                                      '${sensorData['waterTankLevel'].round()} %',
                                       'Water Tank Level',
                                       Colors.lightGreen.shade100,
                                       Icons.local_drink),
                                   _buildStatCard(
-                                      '${sensorData['airQuality']} ppm',
+                                      '${sensorData['airQuality'].round()} ppm',
                                       'Air Quality',
-                                      Colors.lightGreen.shade100,
-                                      Icons.air),
+                                      const Color.fromRGBO(220, 237, 200, 1),
+                                      Icons.air_sharp),
                                   _buildStatCard(
-                                      '${sensorData['light']} lux',
+                                      '${sensorData['light'].round()} lux',
                                       'Light Intensity',
                                       Colors.lightGreen.shade100,
                                       Icons.light_mode),
                                   _buildStatCard(
-                                      '${sensorData['humidity']}%',
+                                      '${sensorData['humidity'].round()}%',
                                       'Humidity',
                                       Colors.lightGreen.shade100,
                                       Icons.water),
                                   _buildStatCard(
-                                      '${sensorData['soilMoisture']}%',
+                                      '${sensorData['soilMoisture'].round()}%',
                                       'Soil Moisture',
                                       Colors.lightGreen.shade100,
                                       Icons.eco),
                                 ],
                               ),
                               SizedBox(height: 15),
-                              // Plant Health Status with Icon
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    healthIcon,
-                                    color: healthColor,
-                                    size: 30,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'Plant Health: ',
-                                    style: GoogleFonts.lato(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.w600,
+                              // Plant Health Status with Icon and Detailed Information
+                              Container(
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.lightGreen.shade50,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          healthIcon,
+                                          color: healthColor,
+                                          size: 30,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Plant Health: ',
+                                          style: GoogleFonts.lato(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        Text(
+                                          plantHealthResult.overallHealth,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w400,
+                                            color: healthColor,
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                    SizedBox(height: 10),
+                                    if (plantHealthResult
+                                        .issues.isNotEmpty) ...[
+                                      Text(
+                                        'Issues:',
+                                        style: GoogleFonts.lato(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      ...plantHealthResult.issues
+                                          .map((issue) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Text(
+                                                  '• $issue',
+                                                  style: GoogleFonts.roboto(
+                                                      fontSize: 16),
+                                                ),
+                                              )),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 25),
+                              Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Water the Plant by',
+                                        style: GoogleFonts.lato(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        mqttProvider.wateringTimeFormatted,
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    plantHealth,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                      color: healthColor,
+                                  Spacer(),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      mqttProvider.waterPlant();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Constants.Mygreen,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 10),
+                                      textStyle: GoogleFonts.lato(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.water_drop,
+                                            color: Colors.white, size: 20),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          'Water the plant',
+                                          style: GoogleFonts.lato(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 25),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -164,9 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           .refreshData();
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: Constants.Mygreen,
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 36, vertical: 10),
+                                          horizontal: 27, vertical: 10),
                                       textStyle: GoogleFonts.lato(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -251,15 +337,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 // Display connection status and loading indicator
+                // if the MQTT not connected yet and the sensor readings
                 if (!mqttProvider.isLoading && !mqttProvider.sensorData.isEmpty)
                   Positioned(
                     bottom: 680,
                     left: 30,
-                    child: Text(
-                      "Connected",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 15,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // White background
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
+                      ),
+                      child: Text(
+                        "Connected",
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   )
@@ -267,25 +362,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   Positioned(
                     bottom: 680,
                     left: 30,
-                    child: Text(
-                      "Disconnected",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 15,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // White background
+                        borderRadius:
+                            BorderRadius.circular(10), // Rounded corners
                       ),
-                    ),
-                  ),
-                if (mqttProvider.isLoading || mqttProvider.sensorData.isEmpty)
-                  Positioned(
-                    bottom: 680,
-                    left: 130,
-                    child: SizedBox(
-                      width: 24, // Set the desired width
-                      height: 24, // Set the desired height
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                        strokeWidth:
-                            3.0, // You can adjust the stroke width if needed
+                      child: Row(
+                        children: [
+                          Text(
+                            "Disconnected",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                            ),
+                          ),
+                          if (mqttProvider.isLoading ||
+                              mqttProvider.sensorData.isEmpty)
+                            SizedBox(
+                                width:
+                                    10), // Add some spacing between the text and the loading indicator
+                          if (mqttProvider.isLoading ||
+                              mqttProvider.sensorData.isEmpty)
+                            SizedBox(
+                              width: 15, // Set the desired width
+                              height: 15, // Set the desired height
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.red),
+                                strokeWidth:
+                                    2.0, // You can adjust the stroke width if needed
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ),
