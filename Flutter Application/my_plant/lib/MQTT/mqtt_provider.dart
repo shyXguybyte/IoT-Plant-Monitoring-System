@@ -31,7 +31,8 @@ class MQTTProvider with ChangeNotifier {
 
   MQTTProvider() {
     _setupAutoRefresh();
-    waterPlantBy(); // Add this line
+    waterPlantBy();
+    _plantHealth = PlantHealthResult('Unknown', []);
   }
 
   void _setupAutoRefresh() {
@@ -62,11 +63,21 @@ class MQTTProvider with ChangeNotifier {
     await _connect();
 
     await Future.delayed(Duration(seconds: 1)); // Simulate refresh delay
-    _sensorData = Map.from(_latestData); // Copy the latest data
+
+    // Parse numeric values to ensure they're stored as numbers
+    _sensorData = Map.from(_latestData.map((key, value) {
+      if (value is String) {
+        return MapEntry(key, double.tryParse(value) ?? value);
+      }
+      return MapEntry(key, value);
+    }));
+
     _lastRefreshTime = DateTime.now(); // Update the last refresh time
 
-    // Add this line to update the watering time
-    waterPlantBy();
+    // Calculate plant health
+    _plantHealth = calculatePlantHealth(_sensorData);
+
+    waterPlantBy(); // Call this after updating _sensorData
 
     _isLoading = false;
     notifyListeners();
@@ -110,24 +121,6 @@ class MQTTProvider with ChangeNotifier {
         : DateFormat('EEE, MMM d, hh:mm a').format(_nextWateringTime!);
   }
 
-  void checkForNewIssues(BuildContext context) {
-    PlantHealthResult newHealth = calculatePlantHealth(_sensorData);
-    if (newHealth.issues.length > _plantHealth.issues.length) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('New plant health issues detected!'),
-          action: SnackBarAction(
-            label: 'View',
-            onPressed: () {
-              // Navigate to a detailed view or open a dialog
-            },
-          ),
-        ),
-      );
-    }
-    _plantHealth = newHealth;
-    notifyListeners();
-  }
 
   void waterPlant() {
     _mqttService.publishMessage('sensor/event', '100');
