@@ -176,9 +176,6 @@ Here’s a more professional version with minimized use of images:
   
   ![Task Handler](https://github.com/user-attachments/assets/94666f18-45c9-4f75-ae99-167abda51f12)
 
----
-
-This format keeps the text concise while retaining the professional tone and clarity. You could also consider linking code directly or embedding smaller relevant portions if the images aren’t necessary.
 
 
 ---
