@@ -65,7 +65,7 @@ Our IoT Plant Monitoring System helps users maintain the health of their plants 
 
 Check out the video below for a demonstration of the project:
 
-  [![Watch the video](https://youtu.be/Oy614uGsVG0)
+  [![Watch the video](https://img.youtube.com/vi/Oy614uGsVG0/0.jpg)](https://youtu.be/Oy614uGsVG0)
 
 ---
 
