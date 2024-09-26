@@ -188,7 +188,8 @@ Our Flutter app provides a smooth, user-friendly experience:
 
 | Home                                                                                                      | Stats                                                                                                     |                                                                                                           |
 |-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/user-attachments/assets/447f7996-fbc8-42ac-82d1-9e75f2fb0e54" width="200"/>  | <img src="https://github.com/user-attachments/assets/0a396308-aeb5-4184-8e06-fd484c6056f7" width="200"/>  |                                                                                                           |
+| <img src="https://github.com/user-attachments/assets/447f7996-fbc8-42ac-82d1-9e75f2fb0e54" width="200"/>  | <img src="https://github.com/user-attachments/assets/e88aca66-7b6d-488d-ba68-1e02a1e097f1" width="200"/>  |                                                                                                           |
+
 
 
 
