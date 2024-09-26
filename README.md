@@ -13,9 +13,10 @@ Welcome to our IoT Plant Monitoring System project, developed as part of the 202
 5. [💻 Software Components](#-software-components)
 6. [🏗️ System Architecture](#️-system-architecture)
 7. [🧩 Data Flow Architecture](#-data-flow-architecture)
-8. [📱 Flutter Application](#-flutter-application)
-9. [📚 Team Members](#-team-members)
-10. [🔗 Useful Resources](#-useful-resources)
+8. [ Embedded ESP32 code]
+9. [📱 Flutter Application](#-flutter-application)
+10. [📚 Team Members](#-team-members)
+11. [🔗 Useful Resources](#-useful-resources)
 
 ---
 
@@ -155,7 +156,32 @@ Our system utilizes a multi-component architecture to ensure efficient data coll
   - Interfaces with Google Sheets for historical data access
   - Uses Firebase Authentication for user login and registration
 ---
+Here’s a more professional version with minimized use of images:
 
+---
+
+## 👨‍💻 Embedded ESP32 Code Overview
+
+- We implemented the **Real-Time Operating System (RTOS)** concept in our ESP32 code, enabling efficient resource utilization and the precise execution of tasks.
+  
+- **Code Structure**: Below is a high-level overview of how the code files are organized:
+  
+  ![Code Files Division](https://github.com/user-attachments/assets/bf42a335-f7ad-4da8-8a9c-82233bf18e70)
+  
+- **Task Breakdown**: Each task is designed to perform specific operations, ensuring modularity and ease of maintenance. Here's a glimpse of the code for each task:
+  
+  ![Task Code](https://github.com/user-attachments/assets/f39ebbea-e407-454d-9cab-4778ef53479e)
+
+- **Task Management**: The "handler" function ensures that tasks are executed in the correct sequence and time, maintaining the RTOS principles:
+  
+  ![Task Handler](https://github.com/user-attachments/assets/94666f18-45c9-4f75-ae99-167abda51f12)
+
+---
+
+This format keeps the text concise while retaining the professional tone and clarity. You could also consider linking code directly or embedding smaller relevant portions if the images aren’t necessary.
+
+
+---
 ## 📱 Flutter Application
 
 
