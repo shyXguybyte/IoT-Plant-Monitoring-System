@@ -5,24 +5,20 @@ Welcome to our IoT Plant Monitoring System project, developed as part of the 202
 
 ## Table of Contents
 
-1. [📚 Team Members](#-team-members)
-2. [🌍 Project Overview](#-project-overview)
-3. [🛠️ Hardware Components](#️-hardware-components)
-4. [📹 Project Demo](#-project-demo)
-5. [🔄 Circuit Diagram](#-circuit-diagram)
-6. [💻 Software Components](#-software-components)
-7. [🏗️ System Architecture](#️-system-architecture)
-8. [🧩 Data Flow Architecture](#-data-flow-architecture)
-9. [📱 Flutter Application](#-flutter-application)
+
+1. [🌍 Project Overview](#-project-overview)
+2. [🛠️ Hardware Components](#️-hardware-components)
+3. [📹 Project Demo](#-project-demo)
+4. [🔄 Circuit Diagram](#-circuit-diagram)
+5. [💻 Software Components](#-software-components)
+6. [🏗️ System Architecture](#️-system-architecture)
+7. [🧩 Data Flow Architecture](#-data-flow-architecture)
+8. [📱 Flutter Application](#-flutter-application)
+9. [📚 Team Members](#-team-members)
 10. [🔗 Useful Resources](#-useful-resources)
 
 ---
-## 📚 Team Members
-- **Shehab Magdy Elsayed**         - ID: 22011558
-- **Samy Adel**                    - ID: 22010107
-- **Ahmed Fekry Abd-Elhamid**      - ID: 22010317
-- **Abdulrahman Mohamed Mahmoud**  - ID: 22011460
-- **Khaled Rabie**                 - ID: 22010332
+
 
 ---
 
@@ -69,7 +65,7 @@ Our IoT Plant Monitoring System helps users maintain the health of their plants 
 
 Check out the video below for a demonstration of the project:
 
-  [![Watch the video](https://img.youtube.com/vi/x0xBuETWe_w/hqdefault.jpg)](https://youtu.be/x0xBuETWe_w)
+  [![Watch the video](https://youtu.be/Oy614uGsVG0)
 
 ---
 
@@ -188,11 +184,18 @@ Our Flutter app provides a smooth, user-friendly experience:
 
 | Home                                                                                                      | Stats                                                                                                     |                                                                                                           |
 |-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/user-attachments/assets/447f7996-fbc8-42ac-82d1-9e75f2fb0e54" width="200"/>  | <img src="https://github.com/user-attachments/assets/e88aca66-7b6d-488d-ba68-1e02a1e097f1" width="200"/>  |                                                                                                           |
+| <img src="https://github.com/user-attachments/assets/d9730e38-6b73-4276-8003-98e3a69bc309" width="200"/>  | <img src="https://github.com/user-attachments/assets/e88aca66-7b6d-488d-ba68-1e02a1e097f1" width="200"/>  |                                                                                                           |
 
 
 
 
+---
+## 📚 Team Members
+- **Shehab Magdy Elsayed**         - ID: 22011558
+- **Samy Adel**                    - ID: 22010107
+- **Ahmed Fekry Abd-Elhamid**      - ID: 22010317
+- **Abdulrahman Mohamed Mahmoud**  - ID: 22011460
+- **Khaled Rabie**                 - ID: 22010332
 ---
 
 ## 🔗 Useful Resources
