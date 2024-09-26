@@ -13,7 +13,7 @@ Welcome to our IoT Plant Monitoring System project, developed as part of the 202
 5. [💻 Software Components](#-software-components)
 6. [🏗️ System Architecture](#️-system-architecture)
 7. [🧩 Data Flow Architecture](#-data-flow-architecture)
-8. [ Embedded ESP32 code]
+8. [👨‍💻 Embedded ESP32 code](#-embedded-esp32-code-overview)
 9. [📱 Flutter Application](#-flutter-application)
 10. [📚 Team Members](#-team-members)
 11. [🔗 Useful Resources](#-useful-resources)
