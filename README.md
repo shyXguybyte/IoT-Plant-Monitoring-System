@@ -144,6 +144,9 @@ Our system utilizes a multi-component architecture to ensure efficient data coll
   - Manages automation tasks
 - **Integration**: Interacts with Google Sheets for data storage
  ![image](https://github.com/user-attachments/assets/7dad1ecd-4d86-4f8a-8bab-4357b5d79f7f)
+- Data logging in Google sheet:
+ ![image (1)](https://github.com/user-attachments/assets/89dd9c64-dce3-42e4-b895-094f357926eb)
+
 
 ### 3. Flutter Mobile Application
 - **Role**: User interface and data visualization
