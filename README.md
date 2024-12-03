@@ -21,8 +21,6 @@ Welcome to our IoT Plant Monitoring System project, developed as part of the 202
 ---
 
 
----
-
 ## 🌍 Project Overview
 
 Our IoT Plant Monitoring System helps users maintain the health of their plants by monitoring various environmental factors such as humidity and soil moisture. With real-time data available on a Flutter application, users can:
